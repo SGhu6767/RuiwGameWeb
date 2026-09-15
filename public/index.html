@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#111827">
+    <title>小游戏大厅</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- ==================== 游戏大厅 ==================== -->
+    <main id="homeScreen" class="screen active">
+        <div class="home-container">
+
+            <div class="logo">
+                <div class="logo-icon">🎮</div>
+                <h1>小游戏大厅</h1>
+                <p>选择一个游戏开始吧</p>
+            </div>
+
+            <div class="game-list">
+
+                <button class="game-card snake-card" onclick="startSnake()">
+                    <div class="game-icon">🐍</div>
+                    <div class="game-info">
+                        <h2>贪吃蛇</h2>
+                        <p>吃掉红色果子，让蛇越来越长！</p>
+                    </div>
+                    <div class="play-arrow">›</div>
+                </button>
+
+                <button class="game-card tetris-card" onclick="startTetris()">
+                    <div class="game-icon">🧱</div>
+                    <div class="game-info">
+                        <h2>经典俄罗斯方块</h2>
+                        <p>移动、旋转方块，消除完整的一行！</p>
+                    </div>
+                    <div class="play-arrow">›</div>
+                </button>
+
+            </div>
+
+            <div class="footer-text">
+                手机和电脑均可游玩
+            </div>
+
+        </div>
+    </main>
+
+
+    <!-- ==================== 贪吃蛇 ==================== -->
+    <main id="snakeScreen" class="screen game-screen">
+
+        <div class="game-wrapper">
+
+            <div class="game-header">
+                <div>
+                    <h2>🐍 贪吃蛇</h2>
+                    <div class="score">
+                        得分：<span id="snakeScore">0</span>
+                    </div>
+                </div>
+
+                <button class="close-button" onclick="exitGame()">×</button>
+            </div>
+
+            <div class="snake-board-container">
+                <canvas id="snakeCanvas"></canvas>
+            </div>
+
+            <div class="control-tip">
+                使用方向键控制蛇移动
+            </div>
+
+            <div class="mobile-controls snake-controls">
+
+                <div class="control-row">
+                    <button class="control-button" data-direction="up">↑</button>
+                </div>
+
+                <div class="control-row">
+                    <button class="control-button" data-direction="left">←</button>
+                    <button class="control-button" data-direction="down">↓</button>
+                    <button class="control-button" data-direction="right">→</button>
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- 贪吃蛇结算 -->
+        <div id="snakeGameOver" class="game-over-overlay">
+
+            <div class="game-over-box">
+
+                <button class="close-button result-close" onclick="exitGame()">×</button>
+
+                <div class="result-icon">🐍</div>
+
+                <h2>游戏结束</h2>
+
+                <p>你的得分</p>
+
+                <div class="final-score">
+                    <span id="snakeFinalScore">0</span>
+                </div>
+
+                <button class="restart-button" onclick="restartSnake()">
+                    再玩一次
+                </button>
+
+                <button class="back-button" onclick="exitGame()">
+                    返回大厅
+                </button>
+
+            </div>
+
+        </div>
+
+    </main>
+
+
+    <!-- ==================== 俄罗斯方块 ==================== -->
+    <main id="tetrisScreen" class="screen game-screen">
+
+        <div class="game-wrapper tetris-wrapper">
+
+            <div class="game-header">
+
+                <div>
+                    <h2>🧱 俄罗斯方块</h2>
+
+                    <div class="score">
+                        得分：<span id="tetrisScore">0</span>
+                    </div>
+
+                    <div class="level">
+                        等级：<span id="tetrisLevel">1</span>
+                    </div>
+                </div>
+
+                <button class="close-button" onclick="exitGame()">×</button>
+
+            </div>
+
+            <div class="tetris-area">
+
+                <div class="tetris-board-container">
+                    <canvas id="tetrisCanvas"></canvas>
+                </div>
+
+                <div class="next-piece">
+                    <div class="next-title">下一个</div>
+                    <canvas id="nextCanvas"></canvas>
+                </div>
+
+            </div>
+
+            <div class="control-tip">
+                ← → 移动　↑ 旋转　↓ 加速　空格：直接落下
+            </div>
+
+            <div class="mobile-controls tetris-controls">
+
+                <div class="control-row">
+                    <button class="control-button rotate-button" data-tetris="rotate">↻</button>
+                </div>
+
+                <div class="control-row">
+                    <button class="control-button" data-tetris="left">←</button>
+                    <button class="control-button" data-tetris="down">↓</button>
+                    <button class="control-button" data-tetris="right">→</button>
+                </div>
+
+                <div class="control-row">
+                    <button class="drop-button" data-tetris="drop">
+                        ⬇ 直接落下
+                    </button>
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- 俄罗斯方块结算 -->
+        <div id="tetrisGameOver" class="game-over-overlay">
+
+            <div class="game-over-box">
+
+                <button class="close-button result-close" onclick="exitGame()">×</button>
+
+                <div class="result-icon">🧱</div>
+
+                <h2>游戏结束</h2>
+
+                <p>你的得分</p>
+
+                <div class="final-score">
+                    <span id="tetrisFinalScore">0</span>
+                </div>
+
+                <button class="restart-button" onclick="restartTetris()">
+                    再玩一次
+                </button>
+
+                <button class="back-button" onclick="exitGame()">
+                    返回大厅
+                </button>
+
+            </div>
+
+        </div>
+
+    </main>
+
+    <script src="game.js"></script>
+
+</body>
+</html>
