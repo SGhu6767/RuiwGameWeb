@@ -1,5 +1,5 @@
 /* =========================================================
-   小游戏大厅
+   RuiwGameWeb
    game.js
    贪吃蛇 + 经典俄罗斯方块
    ========================================================= */
@@ -63,6 +63,7 @@ const SNAKE_SIZE = 20;
 
 let snake = [];
 let snakeFood = {};
+
 let snakeDirection = {
     x: 1,
     y: 0
@@ -108,7 +109,8 @@ function initSnake() {
 
     snakeScore = 0;
 
-    document.getElementById("snakeScore").textContent = snakeScore;
+    document.getElementById("snakeScore").textContent =
+        snakeScore;
 
     createSnakeFood();
 
@@ -116,9 +118,15 @@ function initSnake() {
 
     drawSnake();
 
+    /*
+       贪吃蛇速度：
+       180 毫秒移动一次
+       比之前的 135 毫秒更慢
+    */
+
     snakeTimer = setInterval(
         snakeGameLoop,
-        135
+        180
     );
 }
 
@@ -130,7 +138,9 @@ function stopSnake() {
     snakeRunning = false;
 
     if (snakeTimer !== null) {
+
         clearInterval(snakeTimer);
+
         snakeTimer = null;
     }
 }
@@ -157,17 +167,19 @@ function createSnakeFood() {
                 part.x === food.x &&
                 part.y === food.y
             ) {
+
                 occupied = true;
+
                 break;
             }
-
         }
 
         if (!occupied) {
+
             snakeFood = food;
+
             break;
         }
-
     }
 }
 
@@ -201,7 +213,9 @@ function snakeGameLoop() {
         newHead.y < 0 ||
         newHead.y >= 20
     ) {
+
         snakeGameOver();
+
         return;
     }
 
@@ -214,10 +228,11 @@ function snakeGameLoop() {
             newHead.x === snake[i].x &&
             newHead.y === snake[i].y
         ) {
+
             snakeGameOver();
+
             return;
         }
-
     }
 
 
@@ -241,7 +256,6 @@ function snakeGameLoop() {
     } else {
 
         snake.pop();
-
     }
 
     drawSnake();
@@ -253,6 +267,9 @@ function snakeGameLoop() {
 function drawSnake() {
 
     const size = SNAKE_SIZE;
+
+
+    /* 背景 */
 
     snakeCtx.fillStyle = "#020617";
 
@@ -266,7 +283,9 @@ function drawSnake() {
 
     /* 网格 */
 
-    snakeCtx.strokeStyle = "rgba(255,255,255,0.035)";
+    snakeCtx.strokeStyle =
+        "rgba(255,255,255,0.035)";
+
     snakeCtx.lineWidth = 1;
 
     for (let x = 0; x <= 20; x++) {
@@ -304,7 +323,7 @@ function drawSnake() {
     }
 
 
-    /* 食物 */
+    /* 红色果子 */
 
     snakeCtx.fillStyle = "#ef4444";
 
@@ -321,7 +340,7 @@ function drawSnake() {
     snakeCtx.fill();
 
 
-    /* 食物高光 */
+    /* 果子高光 */
 
     snakeCtx.fillStyle = "#fca5a5";
 
@@ -358,7 +377,6 @@ function drawSnake() {
         );
 
         snakeCtx.fill();
-
     });
 
 
@@ -374,28 +392,56 @@ function drawSnake() {
     if (snakeDirection.x !== 0) {
 
         eye1 = {
-            x: head.x * size + size / 2 + snakeDirection.x * 5,
-            y: head.y * size + size / 2 - 4
+            x:
+                head.x * size +
+                size / 2 +
+                snakeDirection.x * 5,
+
+            y:
+                head.y * size +
+                size / 2 -
+                4
         };
 
         eye2 = {
-            x: head.x * size + size / 2 + snakeDirection.x * 5,
-            y: head.y * size + size / 2 + 4
+            x:
+                head.x * size +
+                size / 2 +
+                snakeDirection.x * 5,
+
+            y:
+                head.y * size +
+                size / 2 +
+                4
         };
 
     } else {
 
         eye1 = {
-            x: head.x * size + size / 2 - 4,
-            y: head.y * size + size / 2 + snakeDirection.y * 5
+            x:
+                head.x * size +
+                size / 2 -
+                4,
+
+            y:
+                head.y * size +
+                size / 2 +
+                snakeDirection.y * 5
         };
 
         eye2 = {
-            x: head.x * size + size / 2 + 4,
-            y: head.y * size + size / 2 + snakeDirection.y * 5
-        };
+            x:
+                head.x * size +
+                size / 2 +
+                4,
 
+            y:
+                head.y * size +
+                size / 2 +
+                snakeDirection.y * 5
+        };
     }
+
 
     snakeCtx.beginPath();
 
@@ -408,6 +454,7 @@ function drawSnake() {
     );
 
     snakeCtx.fill();
+
 
     snakeCtx.beginPath();
 
@@ -423,7 +470,7 @@ function drawSnake() {
 }
 
 
-/* 蛇结束 */
+/* 蛇游戏结束 */
 
 function snakeGameOver() {
 
@@ -437,6 +484,8 @@ function snakeGameOver() {
 }
 
 
+/* 重新开始 */
+
 function restartSnake() {
 
     document.getElementById("snakeGameOver")
@@ -446,7 +495,7 @@ function restartSnake() {
 }
 
 
-/* 蛇改变方向 */
+/* 改变蛇方向 */
 
 function changeSnakeDirection(direction) {
 
@@ -466,7 +515,7 @@ function changeSnakeDirection(direction) {
 }
 
 
-/* 手机方向键 */
+/* 手机方向按钮 */
 
 document.querySelectorAll(
     ".snake-controls .control-button"
@@ -480,6 +529,7 @@ document.querySelectorAll(
 
             const direction =
                 this.dataset.direction;
+
 
             if (direction === "up") {
 
@@ -508,12 +558,9 @@ document.querySelectorAll(
                     x: 1,
                     y: 0
                 });
-
             }
-
         }
     );
-
 });
 
 
@@ -557,6 +604,7 @@ const TETRIS_SHAPES = [
 
     {
         name: "I",
+
         matrix: [
             [1, 1, 1, 1]
         ]
@@ -564,6 +612,7 @@ const TETRIS_SHAPES = [
 
     {
         name: "O",
+
         matrix: [
             [1, 1],
             [1, 1]
@@ -572,6 +621,7 @@ const TETRIS_SHAPES = [
 
     {
         name: "T",
+
         matrix: [
             [0, 1, 0],
             [1, 1, 1]
@@ -580,6 +630,7 @@ const TETRIS_SHAPES = [
 
     {
         name: "S",
+
         matrix: [
             [0, 1, 1],
             [1, 1, 0]
@@ -588,6 +639,7 @@ const TETRIS_SHAPES = [
 
     {
         name: "Z",
+
         matrix: [
             [1, 1, 0],
             [0, 1, 1]
@@ -596,6 +648,7 @@ const TETRIS_SHAPES = [
 
     {
         name: "J",
+
         matrix: [
             [1, 0, 0],
             [1, 1, 1]
@@ -604,6 +657,7 @@ const TETRIS_SHAPES = [
 
     {
         name: "L",
+
         matrix: [
             [0, 0, 1],
             [1, 1, 1]
@@ -613,15 +667,22 @@ const TETRIS_SHAPES = [
 ];
 
 
-/* 方块显示颜色 */
+/* 方块颜色 */
 
 const TETRIS_COLORS = {
+
     I: "#22d3ee",
+
     O: "#facc15",
+
     T: "#c084fc",
+
     S: "#4ade80",
+
     Z: "#f87171",
+
     J: "#60a5fa",
+
     L: "#fb923c"
 };
 
@@ -640,15 +701,19 @@ function initTetris() {
 
     tetrisBoard = [];
 
-    for (let y = 0; y < TETRIS_ROWS; y++) {
+    for (
+        let y = 0;
+        y < TETRIS_ROWS;
+        y++
+    ) {
 
         tetrisBoard.push(
             new Array(TETRIS_COLS).fill(null)
         );
-
     }
 
     tetrisScore = 0;
+
     tetrisLevel = 1;
 
     updateTetrisScore();
@@ -662,20 +727,25 @@ function initTetris() {
     lastDropTime = performance.now();
 
     drawTetris();
+
     drawNextPiece();
 
     tetrisLoop();
 }
 
 
-/* 停止 */
+/* 停止俄罗斯方块 */
 
 function stopTetris() {
 
     tetrisRunning = false;
 
     if (tetrisTimer !== null) {
-        cancelAnimationFrame(tetrisTimer);
+
+        cancelAnimationFrame(
+            tetrisTimer
+        );
+
         tetrisTimer = null;
     }
 }
@@ -688,25 +758,36 @@ function createTetrisPiece() {
     const source =
         TETRIS_SHAPES[
             Math.floor(
-                Math.random() * TETRIS_SHAPES.length
+                Math.random() *
+                TETRIS_SHAPES.length
             )
         ];
 
     const matrix =
-        source.matrix.map(row => [...row]);
+        source.matrix.map(
+            row => [...row]
+        );
 
     return {
+
         name: source.name,
+
         matrix: matrix,
-        x: Math.floor(
-            (TETRIS_COLS - matrix[0].length) / 2
-        ),
+
+        x:
+            Math.floor(
+                (
+                    TETRIS_COLS -
+                    matrix[0].length
+                ) / 2
+            ),
+
         y: 0
     };
 }
 
 
-/* 生成新的当前方块 */
+/* 生成当前方块 */
 
 function spawnTetrisPiece() {
 
@@ -714,18 +795,21 @@ function spawnTetrisPiece() {
 
     currentPiece.x =
         Math.floor(
-            (TETRIS_COLS -
-                currentPiece.matrix[0].length) / 2
+            (
+                TETRIS_COLS -
+                currentPiece.matrix[0].length
+            ) / 2
         );
 
     currentPiece.y = 0;
 
-    nextPiece = createTetrisPiece();
+    nextPiece =
+        createTetrisPiece();
 
     drawNextPiece();
 
 
-    /* 一生成就撞到了 */
+    /* 如果一生成就碰撞 */
 
     if (
         tetrisCollision(
@@ -737,12 +821,11 @@ function spawnTetrisPiece() {
     ) {
 
         tetrisGameOver();
-
     }
 }
 
 
-/* 游戏循环 */
+/* 俄罗斯方块游戏循环 */
 
 function tetrisLoop(time = 0) {
 
@@ -753,8 +836,10 @@ function tetrisLoop(time = 0) {
     const speed =
         Math.max(
             90,
-            750 - (tetrisLevel - 1) * 65
+            750 -
+            (tetrisLevel - 1) * 65
         );
+
 
     if (
         time - lastDropTime >= speed
@@ -768,7 +853,9 @@ function tetrisLoop(time = 0) {
     drawTetris();
 
     tetrisTimer =
-        requestAnimationFrame(tetrisLoop);
+        requestAnimationFrame(
+            tetrisLoop
+        );
 }
 
 
@@ -798,10 +885,14 @@ function tetrisCollision(
             }
 
             const newX =
-                piece.x + x + offsetX;
+                piece.x +
+                x +
+                offsetX;
 
             const newY =
-                piece.y + y + offsetY;
+                piece.y +
+                y +
+                offsetY;
 
 
             if (
@@ -811,7 +902,6 @@ function tetrisCollision(
             ) {
 
                 return true;
-
             }
 
 
@@ -821,11 +911,8 @@ function tetrisCollision(
             ) {
 
                 return true;
-
             }
-
         }
-
     }
 
     return false;
@@ -852,12 +939,11 @@ function moveTetrisHorizontal(amount) {
         currentPiece.x += amount;
 
         drawTetris();
-
     }
 }
 
 
-/* 向下 */
+/* 向下移动 */
 
 function moveTetrisDown() {
 
@@ -883,14 +969,13 @@ function moveTetrisDown() {
         clearTetrisLines();
 
         spawnTetrisPiece();
-
     }
 
     drawTetris();
 }
 
 
-/* 旋转 */
+/* 旋转方块 */
 
 function rotateTetrisPiece() {
 
@@ -909,6 +994,7 @@ function rotateTetrisPiece() {
 
     const rotated = [];
 
+
     for (
         let x = 0;
         x < cols;
@@ -926,13 +1012,11 @@ function rotateTetrisPiece() {
             rotated[x].push(
                 oldMatrix[y][x]
             );
-
         }
-
     }
 
 
-    /* 普通旋转 */
+    /* 正常旋转 */
 
     if (
         !tetrisCollision(
@@ -943,11 +1027,12 @@ function rotateTetrisPiece() {
         )
     ) {
 
-        currentPiece.matrix = rotated;
-
+        currentPiece.matrix =
+            rotated;
     }
 
-    /* 如果贴墙，尝试左右修正 */
+
+    /* 贴墙时尝试向左 */
 
     else if (
         !tetrisCollision(
@@ -959,9 +1044,13 @@ function rotateTetrisPiece() {
     ) {
 
         currentPiece.x--;
-        currentPiece.matrix = rotated;
 
+        currentPiece.matrix =
+            rotated;
     }
+
+
+    /* 贴墙时尝试向右 */
 
     else if (
         !tetrisCollision(
@@ -973,8 +1062,9 @@ function rotateTetrisPiece() {
     ) {
 
         currentPiece.x++;
-        currentPiece.matrix = rotated;
 
+        currentPiece.matrix =
+            rotated;
     }
 
     drawTetris();
@@ -991,6 +1081,7 @@ function hardDropTetris() {
 
     let distance = 0;
 
+
     while (
         !tetrisCollision(
             currentPiece,
@@ -1003,15 +1094,16 @@ function hardDropTetris() {
         currentPiece.y++;
 
         distance++;
-
     }
 
 
     /* 硬降奖励 */
 
-    tetrisScore += distance * 2;
+    tetrisScore +=
+        distance * 2;
 
     updateTetrisScore();
+
 
     lockTetrisPiece();
 
@@ -1038,8 +1130,8 @@ function lockTetrisPiece() {
 
         for (
             let x = 0;
-            x < matrix[y].length;
-            x++
+        x < matrix[y].length;
+        x++
         ) {
 
             if (!matrix[y][x]) {
@@ -1052,6 +1144,7 @@ function lockTetrisPiece() {
             const boardX =
                 currentPiece.x + x;
 
+
             if (
                 boardY >= 0 &&
                 boardY < TETRIS_ROWS &&
@@ -1061,20 +1154,18 @@ function lockTetrisPiece() {
 
                 tetrisBoard[boardY][boardX] =
                     currentPiece.name;
-
             }
-
         }
-
     }
 }
 
 
-/* 消除行 */
+/* 消除完整行 */
 
 function clearTetrisLines() {
 
     let lines = 0;
+
 
     for (
         let y = TETRIS_ROWS - 1;
@@ -1087,55 +1178,74 @@ function clearTetrisLines() {
                 cell => cell !== null
             );
 
+
         if (full) {
 
-            tetrisBoard.splice(y, 1);
+            tetrisBoard.splice(
+                y,
+                1
+            );
 
             tetrisBoard.unshift(
-                new Array(TETRIS_COLS).fill(null)
+                new Array(
+                    TETRIS_COLS
+                ).fill(null)
             );
 
             lines++;
 
             y++;
         }
-
     }
 
 
     if (lines > 0) {
 
         const scoreTable = {
+
             1: 100,
+
             2: 300,
+
             3: 500,
+
             4: 800
         };
 
+
         tetrisScore +=
-            (scoreTable[lines] || 800) *
+            (
+                scoreTable[lines] ||
+                800
+            ) *
             tetrisLevel;
+
 
         tetrisLevel =
             Math.floor(
                 tetrisScore / 1000
             ) + 1;
 
-        updateTetrisScore();
 
+        updateTetrisScore();
     }
 }
 
 
-/* 分数 */
+/* 更新分数 */
 
 function updateTetrisScore() {
 
-    document.getElementById("tetrisScore")
-        .textContent = tetrisScore;
+    document.getElementById(
+        "tetrisScore"
+    ).textContent =
+        tetrisScore;
 
-    document.getElementById("tetrisLevel")
-        .textContent = tetrisLevel;
+
+    document.getElementById(
+        "tetrisLevel"
+    ).textContent =
+        tetrisLevel;
 }
 
 
@@ -1144,13 +1254,18 @@ function updateTetrisScore() {
 function drawTetris() {
 
     const cellWidth =
-        tetrisCanvas.width / TETRIS_COLS;
+        tetrisCanvas.width /
+        TETRIS_COLS;
 
     const cellHeight =
-        tetrisCanvas.height / TETRIS_ROWS;
+        tetrisCanvas.height /
+        TETRIS_ROWS;
 
 
-    tetrisCtx.fillStyle = "#020617";
+    /* 背景 */
+
+    tetrisCtx.fillStyle =
+        "#020617";
 
     tetrisCtx.fillRect(
         0,
@@ -1166,6 +1281,7 @@ function drawTetris() {
         "rgba(255,255,255,0.035)";
 
     tetrisCtx.lineWidth = 1;
+
 
     for (
         let x = 0;
@@ -1186,8 +1302,8 @@ function drawTetris() {
         );
 
         tetrisCtx.stroke();
-
     }
+
 
     for (
         let y = 0;
@@ -1208,11 +1324,10 @@ function drawTetris() {
         );
 
         tetrisCtx.stroke();
-
     }
 
 
-    /* 已经落下的方块 */
+    /* 已落下的方块 */
 
     for (
         let y = 0;
@@ -1238,11 +1353,8 @@ function drawTetris() {
                     cellWidth,
                     cellHeight
                 );
-
             }
-
         }
-
     }
 
 
@@ -1252,6 +1364,7 @@ function drawTetris() {
 
         const matrix =
             currentPiece.matrix;
+
 
         for (
             let y = 0;
@@ -1269,11 +1382,13 @@ function drawTetris() {
                     continue;
                 }
 
+
                 const boardX =
                     currentPiece.x + x;
 
                 const boardY =
                     currentPiece.y + y;
+
 
                 if (boardY >= 0) {
 
@@ -1285,18 +1400,14 @@ function drawTetris() {
                         cellWidth,
                         cellHeight
                     );
-
                 }
-
             }
-
         }
-
     }
 }
 
 
-/* 绘制一个格子 */
+/* 绘制一个俄罗斯方块格子 */
 
 function drawTetrisCell(
     ctx,
@@ -1312,6 +1423,7 @@ function drawTetrisCell(
 
     ctx.fillStyle = color;
 
+
     ctx.fillRect(
         x * width + 1,
         y * height + 1,
@@ -1325,20 +1437,25 @@ function drawTetrisCell(
     ctx.fillStyle =
         "rgba(255,255,255,0.25)";
 
+
     ctx.fillRect(
         x * width + 2,
         y * height + 2,
         width - 4,
-        Math.max(2, height * 0.12)
+        Math.max(
+            2,
+            height * 0.12
+        )
     );
 
 
-    /* 内阴影 */
+    /* 边缘 */
 
     ctx.strokeStyle =
         "rgba(0,0,0,0.25)";
 
     ctx.lineWidth = 1;
+
 
     ctx.strokeRect(
         x * width + 1,
@@ -1353,7 +1470,8 @@ function drawTetrisCell(
 
 function drawNextPiece() {
 
-    nextCtx.fillStyle = "#1e293b";
+    nextCtx.fillStyle =
+        "#1e293b";
 
     nextCtx.fillRect(
         0,
@@ -1362,14 +1480,17 @@ function drawNextPiece() {
         nextCanvas.height
     );
 
+
     if (!nextPiece) {
         return;
     }
+
 
     const matrix =
         nextPiece.matrix;
 
     const cell = 20;
+
 
     const width =
         matrix[0].length * cell;
@@ -1377,11 +1498,19 @@ function drawNextPiece() {
     const height =
         matrix.length * cell;
 
+
     const offsetX =
-        (nextCanvas.width - width) / 2;
+        (
+            nextCanvas.width -
+            width
+        ) / 2;
+
 
     const offsetY =
-        (nextCanvas.height - height) / 2;
+        (
+            nextCanvas.height -
+            height
+        ) / 2;
 
 
     for (
@@ -1400,42 +1529,59 @@ function drawNextPiece() {
                 continue;
             }
 
-            const color =
-                TETRIS_COLORS[nextPiece.name];
 
-            nextCtx.fillStyle = color;
+            const color =
+                TETRIS_COLORS[
+                    nextPiece.name
+                ];
+
+
+            nextCtx.fillStyle =
+                color;
+
 
             nextCtx.fillRect(
-                offsetX + x * cell + 1,
-                offsetY + y * cell + 1,
+                offsetX +
+                x * cell +
+                1,
+
+                offsetY +
+                y * cell +
+                1,
+
                 cell - 2,
                 cell - 2
             );
-
         }
-
     }
 }
 
 
-/* 俄罗斯方块结束 */
+/* 俄罗斯方块游戏结束 */
 
 function tetrisGameOver() {
 
     stopTetris();
 
-    document.getElementById("tetrisFinalScore")
-        .textContent = tetrisScore;
+    document.getElementById(
+        "tetrisFinalScore"
+    ).textContent =
+        tetrisScore;
 
-    document.getElementById("tetrisGameOver")
-        .classList.add("show");
+
+    document.getElementById(
+        "tetrisGameOver"
+    ).classList.add("show");
 }
 
 
+/* 重新开始 */
+
 function restartTetris() {
 
-    document.getElementById("tetrisGameOver")
-        .classList.remove("show");
+    document.getElementById(
+        "tetrisGameOver"
+    ).classList.remove("show");
 
     initTetris();
 }
@@ -1458,6 +1604,7 @@ document.querySelectorAll(
             const action =
                 this.dataset.tetris;
 
+
             if (action === "left") {
 
                 moveTetrisHorizontal(-1);
@@ -1477,12 +1624,9 @@ document.querySelectorAll(
             } else if (action === "drop") {
 
                 hardDropTetris();
-
             }
-
         }
     );
-
 });
 
 
@@ -1497,7 +1641,9 @@ document.addEventListener(
         const key = event.key;
 
 
-        /* 贪吃蛇 */
+        /* =========================
+           贪吃蛇
+           ========================= */
 
         if (
             snakeScreen.classList.contains("active") &&
@@ -1514,8 +1660,8 @@ document.addEventListener(
                 });
 
                 return;
-
             }
+
 
             if (key === "ArrowDown") {
 
@@ -1527,8 +1673,8 @@ document.addEventListener(
                 });
 
                 return;
-
             }
+
 
             if (key === "ArrowLeft") {
 
@@ -1540,8 +1686,8 @@ document.addEventListener(
                 });
 
                 return;
-
             }
+
 
             if (key === "ArrowRight") {
 
@@ -1553,13 +1699,13 @@ document.addEventListener(
                 });
 
                 return;
-
             }
-
         }
 
 
-        /* 俄罗斯方块 */
+        /* =========================
+           俄罗斯方块
+           ========================= */
 
         if (
             tetrisScreen.classList.contains("active") &&
@@ -1595,9 +1741,7 @@ document.addEventListener(
                 event.preventDefault();
 
                 hardDropTetris();
-
             }
-
         }
 
     }
@@ -1624,9 +1768,7 @@ document.addEventListener(
             ) {
 
                 event.preventDefault();
-
             }
-
         }
 
     },
